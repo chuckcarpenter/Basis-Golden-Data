@@ -5,16 +5,18 @@
 
 ## Installation
 
-This module is installed via npm:
+This module is using Node, but outputs easily via the CLI:
 
-``` bash
-$ npm install basisgoldendata
+``` clone
+$ git clone https://github.com/chuckcarpenter/Basis-Golden-Data.git
 ```
 
 ## Example Usage
 
-``` js
-var basisgoldendata = require('basisgoldendata');
+If you don't pass in your user info, you'll be prompted.
+
+``` CLI
+node BGD [username/password]
 ```
 
 ## Testing
@@ -24,30 +26,7 @@ Install [Node](http://nodejs.org) (comes with npm) and Bower.
 From the repo root, install the project's development dependencies:
 
 ```
-npm install
-bower install
+npm install && bower install
 ```
 
-Testing relies on the Karma test-runner. If you'd like to use Karma to
-automatically watch and re-run the test file during development, it's easiest
-to globally install Karma and run it from the CLI.
-
-```
-npm install -g karma
-karma start
-```
-
-To run the tests in Firefox, just once, as CI would:
-
-```
-npm test
-```
-
-
-## Browser support
-
-* Google Chrome (latest)
-* Opera (latest)
-* Firefox 4+
-* Safari 5+
-* Internet Explorer 8+
+Grunt can run tasks if you'd like to contribute to the module. Otherwise, just run the taks above for JSON output.
