@@ -1,7 +1,7 @@
 {
     "name": "BGD",
     "description": "An async data retriever for Basis B1 tracker",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "main": "BGD.js",
     "ignore": [
         "test",

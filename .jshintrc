@@ -1,8 +1,8 @@
 {
     "browser": true,
     "node": true,
-    "es5": true,
     "esnext": true,
+    "expr": false,
     "bitwise": false,
     "curly": false,
     "eqeqeq": true,

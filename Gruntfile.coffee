@@ -1,7 +1,7 @@
 'use strict'
 module.exports = (grunt) ->
     # load all grunt tasks
-    # this assumes matchdep, grunt-contrib-watch, grunt-contrib-coffee, 
+    # this assumes matchdep, grunt-contrib-watch, grunt-contrib-coffee,
     # grunt-coffeelint, grunt-contrib-clean, grunt-contrib-uglify is in the package.json file
     require('matchdep').filterDev('grunt-*').forEach grunt.loadNpmTasks
 
@@ -18,63 +18,39 @@ module.exports = (grunt) ->
                         ' * Copyright (c) <%= grunt.template.today("yyyy") %>' +
                         '  | <%= pkg.author.name %>;\n' +
                         '**/\n'
-        
-        # basic watch tasks first for development
+
+        complexity:
+            generic:
+                src: ['BGD.js']
+            options:
+                errorsOnly: false
+                cyclometric: 6        # default is 3
+                halstead: 16          # default is 8
+                maintainability: 100  # default is 100
+
+        jshint:
+            all: [
+                'Gruntfile.js'
+                'BGD.js'
+                'test/**/*.js'
+            ]
+            options:
+                jshintrc: '.jshintrc'
+
+        mochacli:
+            all: ['test/**/*.js']
+            options:
+                reporter: 'spec'
+                ui: 'tdd'
+
         watch:
-            coffee:
-                files: [
-                    '*.coffee'
-                ]
-                tasks: 'coffee:compile'
+            js:
+                files: ['BGD.js', '!node_modules/**/*.js']
+                tasks: ['default']
                 options:
-                    livereload: true
+                    nospawn: true
 
 
-        # clear out any unneccessary files
-        clean: ['<%= pkg.name %>.js', '!.node_modules/']
-
-
-        # lint our files to make sure we're keeping to team standards
-        coffeelint:
-            files:
-                src: ['<%= pkg.name %>.coffee']
-            options:
-                'indentation':
-                    value: 4
-                    level: 'warn'
-                'no_trailing_whitespace':
-                    level: 'ignore'
-                'max_line_length':
-                    velue: 120
-                    level: 'warn'
-
-
-        # this is here, well so we can compile the files into something 
-        # readable on the interwebs.
-        coffee:
-            compile:
-                options:
-                    bare: true
-                files: 
-                    'build/<%= pkg.name %>.js': 'src/<%= pkg.name %>.coffee'
-
-
-        # clean up, minify and prepare for production use
-        uglify:
-            options:
-                banner: '<%= banner %>'
-            build:
-                files:
-                    '<%= pkg.name %>.min.js': '<%= pkg.name %>.js'
-
-        ## TODO: we need to add tests to start in all modules
-        # prefered to start with Jasmine                    
-    
- 
-    grunt.registerTask 'default', [
-        'clean'
-        'coffeelint'
-        'coffee:compile'
-        'uglify'
-        'clean'
-    ]
+    grunt.registerTask 'test', ['complexity', 'jshint', 'mochacli', 'watch']
+    grunt.registerTask 'ci', ['complexity', 'jshint', 'mochacli']
+    grunt.registerTask 'default', ['test']

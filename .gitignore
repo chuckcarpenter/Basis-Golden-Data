@@ -1,3 +1,7 @@
-node_modules
-bower_components
+basis.json
+*.swp
+.DS_Store
+node_modules/
+npm-debug.log
+bower_components/
 example
