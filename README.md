@@ -1,24 +1,21 @@
 # BGD
-Note, this is my Basis ID: 5236009e91d73028c602b3c4
 
 [![Build Status](https://secure.travis-ci.org/user/BGD.png?branch=master)](http://travis-ci.org/user/BGD)
 
 
 ## Installation
 
-Install with [Bower](http://bower.io):
+This module is installed via npm:
 
+``` bash
+$ npm install basisgoldendata
 ```
-bower install --save BGD
+
+## Example Usage
+
+``` js
+var basisgoldendata = require('basisgoldendata');
 ```
-
-The component can be used as a Common JS module, an AMD module, or a global.
-
-
-## API
-
-### BGD()
-
 
 ## Testing
 
