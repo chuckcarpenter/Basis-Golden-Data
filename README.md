@@ -1,6 +1,6 @@
 # BGD
 
-[![Build Status](https://secure.travis-ci.org/user/BGD.png?branch=master)](http://travis-ci.org/user/BGD)
+[![Build Status](https://travis-ci.org/chuckcarpenter/Basis-Golden-Data.svg)](https://travis-ci.org/chuckcarpenter/Basis-Golden-Data)
 
 
 ## Installation
