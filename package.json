@@ -2,29 +2,20 @@
   "name": "BGD",
   "description": "An async data retriever for Basis B1 tracker",
   "main": "BGD.js",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "devDependencies": {
     "grunt": "~0.4.1",
     "matchdep": "~0.1.1",
-    "grunt-contrib-watch": "~0.4.4",
-    "grunt-contrib-coffee": "~0.7.0",
-    "grunt-coffeelint": "0.0.7",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-uglify": "~0.2.5",
-    "karma": "~0.10.1",
-    "karma-mocha": "~0.1.0",
-    "karma-chrome-launcher": "~0.1.0",
-    "karma-ie-launcher": "~0.1.1",
-    "karma-firefox-launcher": "~0.1.0",
-    "karma-phantomjs-launcher": "~0.1.0",
-    "karma-safari-launcher": "~0.1.1"
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-mocha-cli": "~1.1.0",
+    "grunt-complexity": "~0.1.3"
   },
   "scripts": {
     "test": "./node_modules/.bin/karma start --browsers Firefox --single-run"
   },
   "dependencies": {
     "request": "^2.31.0",
-    "querystring": "^0.2.0",
     "readline": "0.0.3",
     "dateformat": "^1.0.7-1.2.3",
     "chalk": "^0.4.0"

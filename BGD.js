@@ -43,11 +43,12 @@ var checkLogin = function () {
 };
 
 // Thinking about whether this is needed.
-var validateEmail = function (email) {
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-};
+// var validateEmail = function (email) {
+//     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+//     return re.test(email);
+// };
 
+// This provides a generic asking function for user prompts
 var ask = function (question, callback) {
     var r = rl.createInterface({
         input: process.stdin,
@@ -60,30 +61,7 @@ var ask = function (question, callback) {
     });
 };
 
-var getNewDate = function (arg) {
-    ask(chalk.green('Please enter new date.') + chalk.blue(' format: yyyy-mm-dd'), function (answer) {
-        return answer;
-    });
-};
-
-// var askForUser = function () {
-//     prompts.question(chalk.green('What is your Basis username?'), function (answer) {
-//         usr = answer;
-
-//         askForPassword();
-//     });
-// };
-
-// var askForPassword = function () {
-//     prompts.question(chalk.green('What is your Basis password?'), function (answer) {
-//         psw = answer;
-
-//         requestData(usr, psw);
-//         prompts.close();
-//     });
-// };
-
-var getSleepData = function (userid, date) {
+var getSleepData = function (date) {
     request.get({
             url: 'https://app.mybasis.com/api/v2/users/me/days/' + date + '/activities?type=sleep&expand=activities',
             jar: access_token,
@@ -103,16 +81,20 @@ var getSleepData = function (userid, date) {
     );
 };
 
-var getToken = function (error, response, body) {
-    access_token = response.headers['set-cookie'][0].match(/access_token=([0-9a-f]+)/),
+var getToken = function (error, response) {
+    if (error) return console.log(error);
+
+    access_token = response.headers['set-cookie'][0].match(/access_token=([0-9a-f]+)/);
     // refresh_token = response.headers['set-cookie'][0].match( /refresh_token=([0-9a-f]+)/ ),
-    expires = response.headers['set-cookie'][0].match(/expires=([0-9a-f]+)/);
+    // expires = response.headers['set-cookie'][0].match(/expires=([0-9a-f]+)/);
 
     request.get({
         url: 'https://app.mybasis.com/api/v1/user/me.json',
         jar: access_token,
         json: true
     }, function (e, r, user) {
+        if (e) return console.log(e);
+
         ask(chalk.green('Do you want today\'s info?') + chalk.blue(' (Y/N)'), function (answer) {
             var requestDate;
             answer.toLowerCase();
@@ -120,12 +102,12 @@ var getToken = function (error, response, body) {
             if (answer === 'y') {
                 requestDate = dateFormat(date, 'yyyy-mm-dd');
 
-                getSleepData(user.id, requestDate);
+                getSleepData(requestDate);
             } else {
                 ask(chalk.green('Please enter new date.') + chalk.blue(' format: yyyy-mm-dd'), function (answer) {
                     requestDate = answer;
 
-                    getSleepData(user.id, requestDate);
+                    getSleepData(requestDate);
                 });
             }
 
@@ -147,8 +129,9 @@ var requestUser = function (usr, psw) {
         jar: true
     }, function (e, r, data) {
         if (e) return console.log(e);
+
         getToken(e, r, data);
     });
 };
 
-checkLogin();
+exports.BGD = checkLogin();
