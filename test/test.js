@@ -1,7 +1,11 @@
-var expect = chai.expect;
+var expect = require('chai').expect;
+var bgd = require('../libs/basis-cli');
 
-describe('BGD()', function () {
-    it('does something', function () {
-        expect(true).to.equal(false);
+describe('Basis Golden Data', function () {
+    describe('test login with options', function () {
+        it('parses options', function () {
+            // expect(true).to.equal(false);
+        });
+
     });
 });

@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+
+var args = process.argv.slice(2),
+    basis = require('../libs/basis-cli');
+
+basis(args);

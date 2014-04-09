@@ -1,10 +1,14 @@
 'use strict';
 
+// external libs
 var request = require('request');
 var fs = require('fs');
 var dateFormat = require('dateformat');
 var rl = require('readline');
 var chalk = require('chalk');
+
+// internal libs
+var ask = require('./ask');
 
 // example URLs for API
 // for some reason, sleep must be submitted different than activities.
@@ -16,15 +20,24 @@ var chalk = require('chalk');
 
 var date = new Date();
 var outputFile = 'basis.json';
+var args = process.argv.slice(2);
 var usr, psw, access_token, expires;
 
-// If user passed info on start, then we won't ask questions
+
+// Begin by getting the user info, either by checking for args passed or asking on command line.
+
 var checkLogin = function () {
-    if (process.argv.length > 2) {
+    if (args.length >= 1) {
+        var email;
         console.log(chalk.green('Thanks.'));
 
-        usr = process.argv[2];
-        psw = process.argv[3];
+        for (var i = 0; i < args.length; i++) {
+            email = validateEmail(args[i]);
+
+            if (!!email) { usr = args[i]; }
+
+            psw = args[i];
+        }
 
         return requestUser(usr, psw);
     } else {
@@ -35,6 +48,7 @@ var checkLogin = function () {
 
             ask(chalk.green('What is your Basis password?'), function (answer) {
                 psw = answer;
+
                 return requestUser(usr, psw);
             });
         });
@@ -42,43 +56,46 @@ var checkLogin = function () {
 
 };
 
-// Thinking about whether this is needed.
-// var validateEmail = function (email) {
-//     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-//     return re.test(email);
-// };
-
-// This provides a generic asking function for user prompts
-var ask = function (question, callback) {
-    var r = rl.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-
-    return r.question(question + '\n', function (answer) {
-        r.close();
-        callback(answer);
-    });
+var validateEmail = function (email) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
 };
 
-var getSleepData = function (date) {
-    request.get({
-            url: 'https://app.mybasis.com/api/v2/users/me/days/' + date + '/activities?type=sleep&expand=activities',
-            jar: access_token,
-            json: true
-        }, function (e, r, data) {
-            if (e) return console.log(e);
+var getData = function (date) {
+    var url,
+        sleep = 'https://app.mybasis.com/api/v2/users/me/days/' + date + '/activities?type=sleep&expand=activities',
+        activities = 'https://app.mybasis.com/api/v2/users/me/days/' + date + '/activities?type=run,walk,bike&expand=activities',
+        details = 'https://app.mybasis.com/api/v1/chart/me?summary=true&interval=60&units=ms&start_date=' +
+                  date + '&start_offset=-10800&end_offset=10800&heartrate=true&steps=true&calories=true&gsr=true&skin_temp=true&bodystates=true';
 
-            // Now let's save the JSON
-            fs.writeFile(outputFile, JSON.stringify(data, null, 4), function (err) {
-                if (err) {
-                    console.log(err);
-                } else {
-                    console.log('JSON saved to ' + outputFile);
-                }
-            });
+    ask(chalk.green('What kind of data would you like?') + chalk.blue(' sleep/activities/details'), function (answer) {
+        if (answer === 'sleep') {
+            url = sleep;
+        } else if (answer === 'activities') {
+            url = activities;
+        } else {
+            url = details;
         }
-    );
+
+        request.get({
+                url: url,
+                jar: access_token,
+                json: true
+            }, function (e, r, data) {
+                if (e) return console.log(e);
+
+                // Now let's save the JSON
+                fs.writeFile(outputFile, JSON.stringify(data, null, 4), function (err) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log('JSON saved to ' + outputFile);
+                    }
+                });
+            }
+        );
+
+    });
 };
 
 var getToken = function (error, response) {
@@ -102,12 +119,12 @@ var getToken = function (error, response) {
             if (answer === 'y') {
                 requestDate = dateFormat(date, 'yyyy-mm-dd');
 
-                getSleepData(requestDate);
+                getData(requestDate);
             } else {
                 ask(chalk.green('Please enter new date.') + chalk.blue(' format: yyyy-mm-dd'), function (answer) {
                     requestDate = answer;
 
-                    getSleepData(requestDate);
+                    getData(requestDate);
                 });
             }
 
@@ -134,4 +151,4 @@ var requestUser = function (usr, psw) {
     });
 };
 
-exports.BGD = checkLogin();
+module.exports = checkLogin;
