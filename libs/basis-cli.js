@@ -10,23 +10,15 @@ var chalk = require('chalk');
 // internal libs
 var ask = require('./ask');
 
-// example URLs for API
-// for some reason, sleep must be submitted different than activities.
-//
-// https://app.mybasis.com/api/v2/users/me/days/2014-03-1/activities?type=sleep&expand=activities
-// https://app.mybasis.com/api/v1/chart/me?summary=true&interval=60&units=ms&start_date=2014-03-01&start_offset=-10800&end_offset=10800&heartrate=true&steps=true&calories=true&gsr=true&skin_temp=true&bodystates=true
-// https://app.mybasis.com/api/v2/users/me/days/2014-03-1/activities?type=run,walk,bike&expand=activities
-
-
+// global vars for stuff
 var date = new Date();
 var outputFile = 'basis.json';
-var args = process.argv.slice(2);
 var usr, psw, access_token, expires;
 
 
 // Begin by getting the user info, either by checking for args passed or asking on command line.
 
-var checkLogin = function () {
+module.exports = function checkLogin(args) {
     if (args.length >= 1) {
         var email;
         console.log(chalk.green('Thanks.'));
@@ -150,5 +142,3 @@ var requestUser = function (usr, psw) {
         getToken(e, r, data);
     });
 };
-
-module.exports = checkLogin;
