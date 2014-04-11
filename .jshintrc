@@ -20,6 +20,13 @@
     "globals": {
         "jQuery": true,
         "$": true,
-        "window": true
+        "window": true,
+        /* MOCHA */
+        "describe"   : false,
+        "it"         : false,
+        "before"     : false,
+        "beforeEach" : false,
+        "after"      : false,
+        "afterEach"  : false
     }
 }

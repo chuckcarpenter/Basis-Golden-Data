@@ -9,7 +9,7 @@ describe('Basis Golden Data', function () {
         it('passes options to callback', function () {
             var args = ['test@test.com', 'password'];
 
-            expect( function() {
+            expect(function () {
                 bgd(args);
             }).to.not.throw();
         });

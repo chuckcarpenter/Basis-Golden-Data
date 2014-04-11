@@ -1,14 +1,16 @@
 {
-    "name": "BGD",
+    "name": "basis-data",
     "description": "An async data retriever for Basis B1 tracker",
     "version": "0.1.0",
-    "main": "BGD.js",
+    "main": "bin/BGD",
     "ignore": [
         "test",
         ".jshintrc",
+        ".editorconfig",
+        ".gitignore",
         ".travis.yml",
-        "CHANGELOG.md",
-        "karma.conf.js",
+        "README.md",
+        "LICENSE.md",
         "package.json"
     ],
     "devDependencies": {

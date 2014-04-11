@@ -7,8 +7,8 @@
 
 This module is using Node, but outputs easily via the CLI:
 
-``` clone
-$ git clone https://github.com/chuckcarpenter/Basis-Golden-Data.git
+``` npm
+$ npm install -g basis-data
 ```
 
 ## Example Usage
@@ -16,7 +16,7 @@ $ git clone https://github.com/chuckcarpenter/Basis-Golden-Data.git
 If you don't pass in your user info, you'll be prompted.
 
 ``` CLI
-node BGD [username/password]
+basis [username/password]
 ```
 
 ## Testing

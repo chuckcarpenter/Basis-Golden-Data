@@ -1,7 +1,12 @@
 {
-  "name": "BGD",
+  "name": "basis-data",
   "description": "An async data retriever for Basis B1 tracker",
-  "main": "BGD.js",
+  "main": "bin/BGD",
+  "keywords": [
+      "npm",
+      "basis",
+      "api"
+  ],
   "version": "0.1.0",
   "engines": {
     "node": "0.10"

@@ -31,7 +31,8 @@ module.exports = (grunt) ->
         jshint:
             all: [
                 'Gruntfile.js'
-                'BGD.js'
+                'bin/BGD'
+                'libs/**/*.js'
                 'test/**/*.js'
             ]
             options:
@@ -45,12 +46,12 @@ module.exports = (grunt) ->
 
         watch:
             js:
-                files: ['BGD.js', '!node_modules/**/*.js']
+                files: ['libs/**/*.js', '!node_modules/**/*.js']
                 tasks: ['default']
                 options:
                     nospawn: true
 
 
     grunt.registerTask 'test', ['complexity', 'jshint', 'mochacli', 'watch']
-    grunt.registerTask 'ci', ['complexity', 'jshint', 'mochacli']
+    grunt.registerTask 'build', ['complexity', 'jshint', 'mochacli']
     grunt.registerTask 'default', ['test']
